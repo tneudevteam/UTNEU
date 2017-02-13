@@ -15,7 +15,9 @@ class Application @Inject()(adminService: AdminService,
   import configComponent.config
 
   def index = Action {
-    val newAdmin = NewAdmin(config.getString("mock.admin.email"), config.getString("mock.admin.password"))
+    val newAdmin = NewAdmin(config.getString("mock.admin.email"),
+      config.getString("mock.admin.email"),
+      config.getString("mock.admin.password"))
     adminService.create(newAdmin)
       .map(_ ⇒ println("Done"))
       .recover{case ex ⇒ println(ex.getMessage)}
