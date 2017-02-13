@@ -5,5 +5,6 @@
 package object Global {
 
   type ERight[A] = Either[String, A]
+  type UUIDString = String
 
 }

@@ -18,6 +18,7 @@ import scala.util.Try
 trait DBScheme {
 
   def create(bins: Vector[Bin])(key: Key)(implicit ex: ExecutionContext): Future[Unit]
+  def createWithKey(bins: Vector[Bin])(key: Key)(implicit ex: ExecutionContext): Future[Unit]
   def bin[T]: (String) ⇒ (T) ⇒ Bin
 
 }
@@ -36,6 +37,12 @@ class DBSchemeImpl @Inject()(aeroConfig: AeroConfig,
 
   def create(bins: Vector[Bin])(key: Key)(implicit ex: ExecutionContext): Future[Unit] = {
     createRecord(policiesContainer.create, key, bins)
+  }
+
+  def createWithKey(bins: Vector[Bin])(key: Key)(implicit ex: ExecutionContext): Future[Unit] = {
+    val policyWithKey = policiesContainer.create
+    policyWithKey.sendKey = true
+    createRecord(policyWithKey, key, bins)
   }
 
   def bin[T] = (name: String) ⇒ (value: T) ⇒ new Bin(name, value)
